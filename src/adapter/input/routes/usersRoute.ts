@@ -20,13 +20,19 @@ const usersRoutes = Router();
 const userController: UserController = container.resolve('UserController');
 
 usersRoutes.get(
+  '/users/me',
+  authMiddleware,
+  async (request: Request, response: Response) => {
+    return await userController.findUserAuthenticated(request, response);
+  },
+);
+usersRoutes.get(
   '/users/:id',
   authMiddleware,
   async (request: Request, response: Response) => {
     return await userController.findOne(request, response);
   },
 );
-
 usersRoutes.post('/users', async (request: Request, response: Response) => {
   return await userController.create(request, response);
 });

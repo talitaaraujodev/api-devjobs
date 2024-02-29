@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
+import jwt from 'jsonwebtoken';
 import { UserServiceInputPort } from '../../../application/ports/input/UserServiceInputPort';
 import { InjectionTokens } from '../../../utils/types/InjectionTokens';
 import { BaseError } from '../../../utils/errors/BaseError';
+import envConfig from '../../../config/envConfig';
 
 @injectable()
 export class UserController {
@@ -19,6 +21,26 @@ export class UserController {
           user,
         })
         .status(201);
+    } catch (e) {
+      if (e instanceof BaseError) {
+        return response
+          .status(e.code)
+          .json({ message: e.message, status: e.code, errors: e.errors });
+      }
+      return response.json(e).status(500);
+    }
+  }
+  async findUserAuthenticated(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const authHeader = request.headers.authorization || '';
+    const [, token] = authHeader.split(' ');
+    const decoded = jwt.verify(token, envConfig.jwtSecret);
+
+    const user = await this.userServiceInputPort.findOne(String(decoded.sub));
+    try {
+      return response.json(user).status(201);
     } catch (e) {
       if (e instanceof BaseError) {
         return response

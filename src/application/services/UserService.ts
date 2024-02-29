@@ -53,6 +53,10 @@ export class UserService implements UserServiceInputPort {
     if (!user) {
       throw new NotFoundError('Usuário não encontrado por id');
     }
-    return user;
+    return {
+      id: user.id,
+      name: user.name,
+      cpf: user.cpf,
+    } as User;
   }
 }
