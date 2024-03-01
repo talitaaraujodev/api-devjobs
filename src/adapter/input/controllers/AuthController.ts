@@ -14,8 +14,9 @@ export class AuthController {
   async auth(request: Request, response: Response): Promise<Response> {
     try {
       const { email, password } = request.body;
-      const result = await this.authServiceInputPort.auth(email, password);
-      return response.json({ token: result }).status(200);
+      return response
+        .json(await this.authServiceInputPort.auth(email, password))
+        .status(200);
     } catch (e) {
       if (e instanceof BaseError) {
         return response

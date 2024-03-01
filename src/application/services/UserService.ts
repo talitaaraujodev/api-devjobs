@@ -7,6 +7,7 @@ import { User } from '../domain/models/User';
 import { NotFoundError } from '../../utils/errors/NotFoundError';
 import { UserYupValidator } from '../../utils/validators/UserValidator';
 import { BadRequestError } from '../../utils/errors/BadRequestError';
+import { OutputFindOneUserDto } from '../dto/UserDto';
 
 @injectable()
 export class UserService implements UserServiceInputPort {
@@ -21,15 +22,15 @@ export class UserService implements UserServiceInputPort {
     }
     const emailExists = await this.userPersistence.findByEmail(user.email);
     if (emailExists) {
-      throw new BadRequestError('BadRequestError', {
-        error: 'Usuário já existente por e-mail.',
-      });
+      throw new BadRequestError('BadRequestError', [
+        'Usuário já existente por e-mail.',
+      ]);
     }
     const cpfExists = await this.userPersistence.findByCpf(user.cpf);
     if (cpfExists) {
-      throw new BadRequestError('BadRequestError', {
-        error: 'Usuário já existente por CPF.',
-      });
+      throw new BadRequestError('BadRequestError', [
+        'Usuário já existente por CPF.',
+      ]);
     }
     const userCreated = new User(
       uuid(),
@@ -48,15 +49,31 @@ export class UserService implements UserServiceInputPort {
       cpf: userSaved.cpf,
     } as User;
   }
-  async findOne(id: string): Promise<User> {
-    const user = await this.userPersistence.findById(id);
+  async findOne(id: string): Promise<OutputFindOneUserDto> {
+    const user: any = await this.userPersistence.findById(id);
+    let result = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      cpf: user.cpf,
+      profile: !user.Profile
+        ? {}
+        : {
+            id: user.Profile.id,
+            birthDate: user.Profile.birthDate,
+            phone: user.Profile.phone,
+            cep: user.Profile.cep,
+            logradouro: user.Profile.logradouro,
+            number: user.Profile.number,
+            bairro: user.Profile.bairro,
+            statusCivil: user.Profile.statusCivil,
+            cv: user.Profile.curriculumOriginalname,
+          },
+    };
+
     if (!user) {
       throw new NotFoundError('Usuário não encontrado por id');
     }
-    return {
-      id: user.id,
-      name: user.name,
-      cpf: user.cpf,
-    } as User;
+    return result;
   }
 }

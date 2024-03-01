@@ -4,7 +4,7 @@ import { prisma } from '../../../config/database/prisma';
 
 export class ProfilePersistenceAdapter implements ProfilePersistenceOutputPort {
   async save(profile: Profile): Promise<Profile> {
-    const profileSaved = await prisma.profile.create({
+    const profileSaved = await prisma.profileModel.create({
       data: {
         id: profile.id,
         birthDate: profile.birthDate,
@@ -35,14 +35,14 @@ export class ProfilePersistenceAdapter implements ProfilePersistenceOutputPort {
   }
 
   async findById(id: string): Promise<Profile | null> {
-    const profile = (await prisma.profile.findUnique({
+    const profile = (await prisma.profileModel.findUnique({
       where: { id },
     })) as Profile | null;
 
     return profile;
   }
   async findByUserid(userId: string): Promise<Profile | null> {
-    const profile = (await prisma.profile.findUnique({
+    const profile = (await prisma.profileModel.findUnique({
       where: { userId },
     })) as Profile | null;
 

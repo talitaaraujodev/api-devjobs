@@ -34,7 +34,22 @@ export class ProfileService implements ProfileServiceInputPort {
       profile.curriculumFilename,
       profile.userId,
     );
-    return await this.profilePersistence.save(profileCreated);
+
+    const profileSaved = await this.profilePersistence.save(profileCreated);
+
+    return new Profile(
+      profileSaved.id,
+      profileSaved.birthDate,
+      profileSaved.phone,
+      profileSaved.cep,
+      profileSaved.logradouro,
+      profileSaved.number,
+      profileSaved.bairro,
+      profileSaved.statusCivil,
+      profileSaved.curriculumOriginalname,
+      profileSaved.curriculumFilename,
+      profileSaved.userId,
+    );
   }
   async findOne(id: string): Promise<Profile> {
     const profile = await this.profilePersistence.findById(id);

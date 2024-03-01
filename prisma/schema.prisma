@@ -20,19 +20,19 @@ enum CivilStatus {
   WIDOWED
 }
 
-model User {
-  id        String   @id @default(uuid())
+model UserModel {
+  id        String        @id @default(uuid())
   name      String
-  cpf       String   @unique @db.VarChar(11)
-  email     String   @unique
+  cpf       String        @unique @db.VarChar(11)
+  email     String        @unique
   password  String
-  createdAt DateTime @default(now())
-  Profile   Profile?
+  createdAt DateTime      @default(now())
+  Profile   ProfileModel?
 
   @@map("users")
 }
 
-model Profile {
+model ProfileModel {
   id                     String      @id @default(uuid())
   birthDate              DateTime    @db.Date
   phone                  String      @db.VarChar(11)
@@ -44,7 +44,7 @@ model Profile {
   curriculumOriginalname String
   curriculumFilename     String
   userId                 String      @unique
-  user                   User        @relation(fields: [userId], references: [id])
+  user                   UserModel   @relation(fields: [userId], references: [id])
   createdAt              DateTime    @default(now())
 
   @@map("profiles")
