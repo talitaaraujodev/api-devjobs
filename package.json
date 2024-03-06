@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/shared/http/server.ts",
-    "start": "npm run build && node dist/src/shared/http/server.js",
+    "start": "node dist/src/shared/http/server.js",
     "vercel-build": "npx prisma migrate deploy",
     "lint": "eslint \"{src,tests}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
