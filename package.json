@@ -8,7 +8,7 @@
     "build": "tsc",
     "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/shared/http/server.ts",
     "start": "npm run build && node dist/src/shared/http/server.js",
-    "vercel:build": "npx prisma migrate deploy",
+    "vercel-build": "npx prisma migrate deploy",
     "lint": "eslint \"{src,tests}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "debug": "tsnd --files --transpile-only --respawn --ignore-watch node_modules --inspect=4321 --project tsconfig.json src/shared/http/server.ts"
