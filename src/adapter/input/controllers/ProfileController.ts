@@ -62,7 +62,6 @@ export class ProfileController {
     try {
       const id = request.params.id;
       const profile = await this.profileServiceInputPort.findByUserid(id);
-      console.log('profile:', profile);
       const filePath = path.resolve(
         __dirname,
         '..',

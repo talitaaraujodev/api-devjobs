@@ -36,8 +36,6 @@ function authMiddleware(
 
     next();
   } catch (error) {
-    console.log('teste:', envConfig.jwtSecret);
-    console.log('error:', error);
     return response.status(401).send(
       new UnauthorizedError('UnauthorizedError', {
         error: 'Token JWT inspirado',
